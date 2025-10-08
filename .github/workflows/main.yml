@@ -7,11 +7,16 @@ jobs:
   build:
     runs-on: ubuntu-22.04
     steps:
+      - name: Setup sudo helper
+        run: echo "SUDO=$(command -v sudo >/dev/null 2>&1 && echo sudo)" >> $GITHUB_ENV
+      
       - name: Install unzip
-        run: sudo apt-get update && sudo apt-get install unzip -y
+        run: $SUDO apt-get update && $SUDO apt-get install unzip -y
       
       - name: Checkout
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8
+        with:
+          submodules: recursive
       
       - name: Set outputs
         id: vars

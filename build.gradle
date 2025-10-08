@@ -1,12 +1,22 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 buildscript {
     ext {
+        // Koler project properties
         sdkVersion = 33
         minSdkVersion = 25
         hiltVersion = "2.44"
         kotlinVersion = "1.8.0"
         coreKtxVersion = "1.9.0"
         appCompatVersion = "1.6.0"
+        
+        // BlackBox required properties
+        compileSdkVersion = 30
+        buildToolsVersion = "28.0.2"
+        targetSdkVersion = 30
+        versionName = '1.0'
+        versionCode = 1
+        xVersion = '1.1.0'
+        blackReflection = '1.1.2'
     }
 
     repositories {
@@ -33,6 +43,14 @@ allprojects {
         jcenter()
         mavenCentral()
         maven { url "https://jitpack.io" }
+    }
+    
+    configurations.all {
+        resolutionStrategy {
+            dependencySubstitution {
+                substitute module('me.weishu:free_reflection') using module('com.github.tiann:FreeReflection:3.1.0')
+            }
+        }
     }
 }
 

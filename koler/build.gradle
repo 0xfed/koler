@@ -75,6 +75,7 @@ dependencies {
 
     implementation(
             project(":chooloolib"),
+            project(":Bcore"),
             fileTree(include: ["*.jar"], dir: "libs"),
 
             // ktx

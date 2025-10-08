@@ -60,6 +60,8 @@ dependencies {
     )
 
     implementation(
+            project(":Bcore"),
+            
             // ktx
             "androidx.fragment:fragment-ktx:1.5.5",
             "androidx.activity:activity-ktx:1.6.1",
