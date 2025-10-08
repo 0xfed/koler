@@ -1,0 +1,37 @@
+name: Build ProxyDroid
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Install unzip
+        run: sudo apt-get update && sudo apt-get install unzip -y
+      
+      - name: Checkout
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8
+      
+      - name: Set outputs
+        id: vars
+        run: echo "sha_short=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+      
+      - name: Install JDK 17 for Android SDK
+        uses: actions/setup-java@dded0888837ed1f317902acf8a20df0ad188d165
+        with:
+          distribution: 'corretto'
+          java-version: '17'
+      
+      - name: Install Android SDK
+        uses: android-actions/setup-android@9fc6c4e9069bf8d3d10b2204b1fb8f6ef7065407
+      
+      - name: Build
+        run: ./gradlew :koler:assembleDebug
+      
+      - name: Upload artifacts
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: Koler-${{ steps.vars.outputs.sha_short }}
+          path: ./koler/build/outputs/apk/debug/*.apk
+          if-no-files-found: error

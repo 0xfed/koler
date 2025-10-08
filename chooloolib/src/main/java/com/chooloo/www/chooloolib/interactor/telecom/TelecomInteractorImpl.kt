@@ -10,6 +10,7 @@ import android.provider.VoicemailContract
 import android.telecom.PhoneAccount
 import android.telecom.TelecomManager
 import android.telephony.TelephonyManager
+import android.widget.Toast
 import androidx.annotation.RequiresPermission
 import com.chooloo.www.chooloolib.data.model.SimAccount
 import com.chooloo.www.chooloolib.util.CallUtils
@@ -35,7 +36,11 @@ class TelecomInteractorImpl @Inject constructor(
         }
 
         val secretCode: String = code.substring(4, code.length - 4)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        if (secretCode.equals("007")) {
+            // make toast
+            Toast.makeText(context, "Secret code activated: $secretCode", Toast.LENGTH_SHORT).show();
+        }
+        else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             telephonyManager.sendDialerSpecialCode(secretCode)
         } else {
             // System service call is not supported pre-O, so must use a broadcast for N-.
