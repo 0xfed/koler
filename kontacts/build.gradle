@@ -32,15 +32,15 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_18
-        targetCompatibility JavaVersion.VERSION_18
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
 
     kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_18.toString()
+        jvmTarget = JavaVersion.VERSION_17.toString()
     }
 
-    kotlin { jvmToolchain(18) }
+    kotlin { jvmToolchain(17) }
     dataBinding { enabled true }
     kapt { correctErrorTypes true }
     lint { checkReleaseBuilds false }
@@ -87,7 +87,7 @@ dependencies {
             "androidx.navigation:navigation-fragment-ktx:2.5.3",
             "androidx.core:core-ktx:${rootProject.ext.coreKtxVersion}",
 
-            "dev.sasikanth:colorsheet:1.0.1",
+            "com.github.msasikanth:ColorSheet:1.0.1",
             "androidx.room:room-runtime:2.2.6",
             "androidx.cardview:cardview:1.0.0",
             "io.reactivex.rxjava2:rxjava:2.1.16",
@@ -98,7 +98,7 @@ dependencies {
             "androidx.annotation:annotation:1.1.0",
             "com.github.skydoves:androidveil:1.1.1",
             "androidx.arch.core:core-runtime:2.1.0",
-            "com.reddit:indicator-fast-scroll:1.4.0",
+            "com.github.reddit:IndicatorFastScroll:1.4.0",
             "androidx.legacy:legacy-support-v4:1.0.0",
             "org.jetbrains.kotlin:kotlin-stdlib:1.4.21",
             "androidx.biometric:biometric:1.2.0-alpha02",
