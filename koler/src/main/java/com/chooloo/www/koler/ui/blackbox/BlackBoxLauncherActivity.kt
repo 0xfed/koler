@@ -2,9 +2,12 @@ package com.chooloo.www.koler.ui.blackbox
 
 import android.content.pm.ApplicationInfo
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -22,11 +25,15 @@ class BlackBoxLauncherActivity : AppCompatActivity() {
         val icon: android.graphics.drawable.Drawable?
     )
 
+    private lateinit var adapter: AppAdapter
+    private lateinit var allApps: List<AppInfo>
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_blackbox_launcher)
         
         setupRecyclerView()
+        setupSearch()
     }
 
     private fun setupRecyclerView() {
@@ -35,8 +42,8 @@ class BlackBoxLauncherActivity : AppCompatActivity() {
         
         // Get all installed non-system apps
         val packageManager = packageManager
-        val apps = packageManager.getInstalledApplications(0)
-            .filter { app -> !(app.flags and ApplicationInfo.FLAG_SYSTEM != 0) }
+        allApps = packageManager.getInstalledApplications(0)
+            // .filter { app -> !(app.flags and ApplicationInfo.FLAG_SYSTEM != 0) }
             .map { app ->
                 AppInfo(
                     packageName = app.packageName,
@@ -46,15 +53,41 @@ class BlackBoxLauncherActivity : AppCompatActivity() {
             }
             .sortedBy { it.appName }
 
-        if (apps.isEmpty()) {
-            Toast.makeText(this, "No non-system apps found", Toast.LENGTH_SHORT).show()
+        if (allApps.isEmpty()) {
+            Toast.makeText(this, "No apps found", Toast.LENGTH_SHORT).show()
             finish()
             return
         }
 
-        recyclerView.adapter = AppAdapter(apps) { app ->
+        adapter = AppAdapter(allApps) { app ->
             launchInBlackBox(app.packageName)
         }
+        recyclerView.adapter = adapter
+    }
+
+    private fun setupSearch() {
+        val searchBox = findViewById<EditText>(R.id.searchBox)
+        searchBox.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                filterApps(s.toString())
+            }
+            
+            override fun afterTextChanged(s: Editable?) {}
+        })
+    }
+
+    private fun filterApps(query: String) {
+        val filteredApps = if (query.isEmpty()) {
+            allApps
+        } else {
+            allApps.filter { app ->
+                app.appName.contains(query, ignoreCase = true) ||
+                app.packageName.contains(query, ignoreCase = true)
+            }
+        }
+        adapter.updateList(filteredApps)
     }
 
     private fun launchInBlackBox(packageName: String) {
@@ -84,7 +117,7 @@ class BlackBoxLauncherActivity : AppCompatActivity() {
     }
 
     private class AppAdapter(
-        private val apps: List<AppInfo>,
+        private var apps: List<AppInfo>,
         private val onAppClick: (AppInfo) -> Unit
     ) : RecyclerView.Adapter<AppAdapter.ViewHolder>() {
 
@@ -111,5 +144,10 @@ class BlackBoxLauncherActivity : AppCompatActivity() {
         }
 
         override fun getItemCount() = apps.size
+
+        fun updateList(newApps: List<AppInfo>) {
+            apps = newApps
+            notifyDataSetChanged()
+        }
     }
 }

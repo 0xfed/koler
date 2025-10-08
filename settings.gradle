@@ -2,20 +2,8 @@ include ':koler'
 include ':chooloolib'
 include ':kontacts'
 
-// BlackBox modules - include with original structure preserved
+// NewBlackbox modules - simplified structure
 include ':Bcore'
-include ':Bcore:black-fake'
-include ':Bcore:black-hook'
-include ':Bcore:pine-xposed'
-include ':Bcore:pine-core'
-include ':Bcore:pine-xposed-res'
-include ':android-mirror'
 
-// Map the BlackBox submodule paths
+// Map the NewBlackbox submodule path
 project(':Bcore').projectDir = new File(rootDir, 'BlackBox/Bcore')
-project(':Bcore:black-fake').projectDir = new File(rootDir, 'BlackBox/Bcore/black-fake')
-project(':Bcore:black-hook').projectDir = new File(rootDir, 'BlackBox/Bcore/black-hook')
-project(':Bcore:pine-xposed').projectDir = new File(rootDir, 'BlackBox/Bcore/pine-xposed')
-project(':Bcore:pine-core').projectDir = new File(rootDir, 'BlackBox/Bcore/pine-core')
-project(':Bcore:pine-xposed-res').projectDir = new File(rootDir, 'BlackBox/Bcore/pine-xposed-res')
-project(':android-mirror').projectDir = new File(rootDir, 'BlackBox/android-mirror')

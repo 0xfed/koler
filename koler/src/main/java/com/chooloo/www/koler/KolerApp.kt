@@ -17,11 +17,34 @@ open class KolerApp : ChoolooApp() {
     override fun attachBaseContext(base: Context) {
         super.attachBaseContext(base)
         try {
-            BlackBoxCore.get().doAttachBaseContext(base, object : top.niunaijun.blackbox.app.configuration.ClientConfiguration() {
-                override fun getHostPackageName(): String {
-                    return base.packageName
-                }
-            })
+            // NewBlackbox initialization sequence
+            try {
+                BlackBoxCore.get().closeCodeInit()
+            } catch (e: Exception) {
+                android.util.Log.e("KolerApp", "Error in closeCodeInit: ${e.message}")
+            }
+
+            try {
+                BlackBoxCore.get().onBeforeMainApplicationAttach(this, base)
+            } catch (e: Exception) {
+                android.util.Log.e("KolerApp", "Error in onBeforeMainApplicationAttach: ${e.message}")
+            }
+
+            try {
+                BlackBoxCore.get().doAttachBaseContext(base, object : top.niunaijun.blackbox.app.configuration.ClientConfiguration() {
+                    override fun getHostPackageName(): String {
+                        return base.packageName
+                    }
+                })
+            } catch (e: Exception) {
+                android.util.Log.e("KolerApp", "Error in doAttachBaseContext: ${e.message}")
+            }
+
+            try {
+                BlackBoxCore.get().onAfterMainApplicationAttach(this, base)
+            } catch (e: Exception) {
+                android.util.Log.e("KolerApp", "Error in onAfterMainApplicationAttach: ${e.message}")
+            }
         } catch (e: Exception) {
             e.printStackTrace()
         }

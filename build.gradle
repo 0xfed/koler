@@ -2,21 +2,23 @@
 buildscript {
     ext {
         // Koler project properties
-        sdkVersion = 33
+        sdkVersion = 34
         minSdkVersion = 25
         hiltVersion = "2.44"
         kotlinVersion = "1.8.0"
         coreKtxVersion = "1.9.0"
         appCompatVersion = "1.6.0"
         
-        // BlackBox required properties
-        compileSdkVersion = 30
+        // NewBlackbox required properties (from NewBlackbox/build.gradle)
+        compileSdkVersion = 35
         buildToolsVersion = "28.0.2"
-        targetSdkVersion = 30
-        versionName = '1.0'
+        targetSdkVersion = sdkVersion
+        minSdk = minSdkVersion
+        versionName = '3.0.7r4'
         versionCode = 1
         xVersion = '1.1.0'
         blackReflection = '1.1.2'
+        hiddenApiBypass = '4.3'
     }
 
     repositories {
@@ -48,7 +50,8 @@ allprojects {
     configurations.all {
         resolutionStrategy {
             dependencySubstitution {
-                substitute module('me.weishu:free_reflection') using module('com.github.tiann:FreeReflection:3.1.0')
+                // NewBlackbox uses FreeReflection 3.2.2
+                substitute module('me.weishu:free_reflection') using module('com.github.tiann:FreeReflection:3.2.2')
             }
         }
     }
