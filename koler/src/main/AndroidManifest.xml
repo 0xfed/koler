@@ -61,5 +61,9 @@
                 <data android:scheme="tel" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".ui.blackbox.BlackBoxLauncherActivity"
+            android:exported="false" />
     </application>
 </manifest>
